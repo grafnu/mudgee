@@ -7,9 +7,12 @@ RUN (echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 ENV PATH $JAVA_HOME/bin:$PATH
 
-RUN apt-get update && apt-get install -y \
-tcpdump
+RUN apt-get update && apt-get install -y tcpdump maven
 
-ADD target ./mudgee
+COPY . /root/mudgee/
 
-CMD java -jar mudgee/mudgee-1.0.0-SNAPSHOT.jar mudgee/mud_config.json 
+WORKDIR /root/mudgee
+
+RUN mvn clean install
+
+CMD java -jar mudgee/mudgee-1.0.0-SNAPSHOT.jar mudgee/mud_config.json
